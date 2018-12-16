@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">try</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="googel_maps_API_key">string>AIzaSyANJpBaSt6FcqB5sWqiQzLowQtwlJuYjDU</string>
+    <string name="title_activity_firebace">firebace</string>
+</resources>

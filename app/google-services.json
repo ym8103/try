@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "324389963605",
+    "firebase_url": "https://try123-dafff.firebaseio.com",
+    "project_id": "try123-dafff",
+    "storage_bucket": "try123-dafff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324389963605:android:3cf306ca571b67af",
+        "android_client_info": {
+          "package_name": "com.example.yuvalmordok.atry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324389963605-6t8ovs63vt0o8ahg5h1gm7u7mp4chtpr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQfKqqdKDVGBkF3inJo0sR1ce0xf1lCZU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
