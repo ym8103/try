@@ -47,6 +47,7 @@ public class firebace extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                itemList.clear();
                 for (DataSnapshot itemSnapsht : dataSnapshot.getChildren())
                 {
                     Item item = itemSnapsht.getValue(Item.class);
