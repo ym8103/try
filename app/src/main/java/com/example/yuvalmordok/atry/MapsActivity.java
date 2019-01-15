@@ -27,6 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,8 +39,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private TextToSpeech mTTS;
-   // String loc;
     Geocoder geocoder;
+    DatabaseReference ref;
+
+    boolean flag = false;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -94,6 +98,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        ref = FirebaseDatabase.getInstance().getReference("Item");
+
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -140,6 +146,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
                             String text = getAddressForLocation(currentLocation);
+
+                            if (!flag) {
+                                String id = ref.push().getKey();
+                                Item item = new Item(id, text);
+
+                                ref.child(id).setValue(item);
+
+                                flag = true;
+                            }
 
                             moveCamera(latLng, DEFAULT_ZOOM);
 
