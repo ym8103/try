@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:text="are you sure you want to remove it? " />
+
+    <Button
+        android:id="@+id/no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="no" />
+
+    <Button
+        android:id="@+id/yes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="yes" />
+</LinearLayout>
