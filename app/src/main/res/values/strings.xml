@@ -3,4 +3,5 @@
     <string name="title_activity_maps">Map</string>
     <string name="googel_maps_API_key">string>AIzaSyANJpBaSt6FcqB5sWqiQzLowQtwlJuYjDU</string>
     <string name="title_activity_firebace">firebace</string>
+    <string name="info">To know your current position click the button at the bottom of the main screen to know previous locations Click on the top side of the screen to the right of the top button and click on the browse section to know the last position and any button below it to know the location before long press will open the window Do you want to delete the location It.Successfully used to confirm Press in the center of the screen</string>
 </resources>

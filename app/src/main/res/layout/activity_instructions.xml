@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Instructions">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="384dp"
+        android:text='To know your current position click the button at the bottom of the main screen to know previous locations Click on the top side of the screen to the right of the top button and click on the browse section to know the last position and any button below it to know the location before long press will open the window Do you want to delete the location It.Successfully used to confirm Press in the center of the screen'
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="265dp"
+        android:onClick="next"
+        android:text="next" />
+</LinearLayout>

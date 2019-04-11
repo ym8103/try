@@ -7,6 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -46,13 +50,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback , SensorEventListener {
 
     private GoogleMap mMap,map;
     private TextToSpeech mTTS;
     Geocoder geocoder;
     DatabaseReference ref;
     AlertDialog.Builder adb;
+    private SensorManager mSensorManager;
 
     boolean flag = false;
     private static final String TAG = "MapActivity";
@@ -71,28 +76,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
-        adb=new AlertDialog.Builder(this);
-      /*  mTTS.speak("To know your current position click the button at the bottom of the main screen to" +
-                " know previous locations Click on the top side of the screen to the right of the top button and" +
-                " click on the browse section to know the last position and any button below it to know the location" +
-                " before long press will open the window Do you want to delete the location It." +
-                " Successfully used to confirm Press in the center of the screen",TextToSpeech.QUEUE_FLUSH,null);*/
-
-        adb.setTitle("operating instructions");
-        adb.setMessage("To know your current position click the button at the bottom of the main screen " +
-                "to know previous locations Click on the top side of the screen to the right of the top button and click" +
-                " on the browse section to know the last position and any button below it to" +
-                " know the location before long press will open the window Do you want to delete the location It." +
-                " Successfully used to confirm Press in the center of the screen");
-        adb.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        AlertDialog ad=adb.create();
-        ad.show();
 
 
         ref = FirebaseDatabase.getInstance().getReference("Item");
@@ -122,6 +107,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getLocationPermission();
+
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+                SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mSensorManager.unregisterListener(this);
     }
 
     @Override
@@ -133,24 +134,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (mLocationPermissionsGranted) {
             getDeviceLocation();
-
-           /* mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-                @Override
-                public void onInit(int status) {
-                    if (status == TextToSpeech.SUCCESS) {
-                        int result = mTTS.setLanguage(Locale.ENGLISH);
-
-                        if (result == TextToSpeech.LANG_MISSING_DATA
-                                || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                            Log.e("TTS", "Language not supported");
-                        } else {
-                            mTTS.speak(loc, TextToSpeech.QUEUE_FLUSH, null);;
-                        }
-                    } else {
-                        Log.e("TTS", "Initialization failed");
-                    }
-                }
-            });*/
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -184,14 +167,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             String text = getAddressForLocation(currentLocation);
 
-                            if (!flag) {
-                                String id = ref.push().getKey();
+                            //if (!flag) {
+                            String id = ref.push().getKey();
                                 Item item = new Item(id, text);
 
                                 ref.child(id).setValue(item);
 
                                 flag = true;
-                            }
+                            //}
 
                             moveCamera(latLng, DEFAULT_ZOOM);
 
@@ -336,4 +319,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
 }

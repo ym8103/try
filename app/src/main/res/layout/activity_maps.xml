@@ -18,10 +18,11 @@
             tools:context=".MapsActivityWifi" />
 
         <Button
-        android:onClick="list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:onClick="list"
+            android:text="location" />
     </LinearLayout>
 
 </FrameLayout>
