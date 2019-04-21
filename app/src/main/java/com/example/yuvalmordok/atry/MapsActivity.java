@@ -44,6 +44,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     DatabaseReference ref;
     AlertDialog.Builder adb;
     private SensorManager mSensorManager;
+
 
     boolean flag = false;
     private static final String TAG = "MapActivity";
@@ -166,15 +168,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
                             String text = getAddressForLocation(currentLocation);
+                            LatLng test = SphericalUtil.computeOffset(latLng, 2, 90);
 
-                            //if (!flag) {
+
                             String id = ref.push().getKey();
                                 Item item = new Item(id, text);
 
                                 ref.child(id).setValue(item);
 
                                 flag = true;
-                            //}
+
 
                             moveCamera(latLng, DEFAULT_ZOOM);
 
@@ -298,7 +301,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("firebace");
+        menu.add("history");
         menu.add("cretit");
        return super.onCreateOptionsMenu(menu);
     }
@@ -306,7 +309,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         String title = item.getTitle().toString();
-        if (title.equals("firebace"))
+        if (title.equals("history"))
         {
             Intent t = new Intent(this, firebace.class);
             startActivity(t);
