@@ -59,6 +59,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     DatabaseReference ref;
     AlertDialog.Builder adb;
     private SensorManager mSensorManager;
+    boolean destflag;
+
 
 
     boolean flag = false;
@@ -72,15 +74,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-
+    double rtheading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-
 
         ref = FirebaseDatabase.getInstance().getReference("Item");
 
@@ -150,56 +151,79 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void getDeviceLocation() {
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
+            Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        try {
-            if (mLocationPermissionsGranted) {
+            try {
+                if (mLocationPermissionsGranted) {
 
-                final Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
+                    final Task location = mFusedLocationProviderClient.getLastLocation();
+                    location.addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "onComplete: found location!");
+                                Location currentLocation = (Location) task.getResult();
 
-                            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-                            String text = getAddressForLocation(currentLocation);
-                            LatLng test = SphericalUtil.computeOffset(latLng, 2, 90);
+                                String text = getAddressForLocation(currentLocation);
+                                destflag= true;
+                                int dest= 1;
+                                String testtext = "";
+                                while (destflag) {
+                                        LatLng test = SphericalUtil.computeOffset(latLng, dest, rtheading);
+                                        Location targetLocation;
+                                        targetLocation = new Location(LocationManager.GPS_PROVIDER);
+                                        targetLocation.setLatitude(test.latitude);
+                                        targetLocation.setLongitude(test.longitude);
+                                        testtext = getAddressForLocation(targetLocation);
+                                        if (testtext.equals(text) && dest<6){
+                                            dest++;
+
+                                        }else { if (testtext.equals(text) && dest==6){
+                                            destflag=false;
+                                        }else {if (!testtext.equals(text)){
+                                            destflag=false;}
+                                        }
+                                    }
+                                }
+                                if (testtext.equals(text)){
+                                    mTTS.speak("you are at"+text, TextToSpeech.QUEUE_FLUSH, null);
+
+                                }else {
+                                    mTTS.speak("you are at"+text+"looking at "+testtext, TextToSpeech.QUEUE_FLUSH, null);
+                                }
 
 
-                            String id = ref.push().getKey();
-                                Item item = new Item(id, text);
+                                String id = ref.push().getKey();
+                                Item item = new Item(id, text,testtext);
 
                                 ref.child(id).setValue(item);
 
                                 flag = true;
 
-
-                            moveCamera(latLng, DEFAULT_ZOOM);
-
-                            mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                                moveCamera(latLng, DEFAULT_ZOOM);
 
 
 
 
-                        } else {
-                            Log.d(TAG, "onComplete: current location is null");
-                            Toast.makeText(MapsActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Log.d(TAG, "onComplete: current location is null");
+                                Toast.makeText(MapsActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
 
-                    }
-
-                });
+                    });
 
 
+                }
+            } catch (SecurityException e) {
+                Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
             }
-        } catch (SecurityException e) {
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
-        }
 
     }
     private void moveCamera(LatLng latLng, float zoom){
@@ -323,7 +347,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
+    public void onSensorChanged(SensorEvent event) {
+        float degree = Math.round(event.values[0]);
+        rtheading = degree;
 
     }
 

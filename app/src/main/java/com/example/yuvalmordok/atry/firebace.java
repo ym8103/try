@@ -32,6 +32,7 @@ import java.util.Locale;
 public class firebace extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     EditText nameText;
+    EditText nameTarget;
     ListView list;
 
     DatabaseReference ref;
@@ -103,10 +104,11 @@ public class firebace extends AppCompatActivity implements AdapterView.OnItemCli
 
     public void upload(View view) {
         String name = nameText.getText().toString();
+        String target= nameTarget.getText().toString();
 
         if (!name.isEmpty()){
             String id=ref.push().getKey();
-            Item item= new Item(id, name);
+            Item item= new Item(id, name,target);
             ref.child(id).setValue(item);
 
 
@@ -116,7 +118,8 @@ public class firebace extends AppCompatActivity implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             String name = itemList.get(i).getName();
-                mTTS.speak(name,TextToSpeech.QUEUE_FLUSH,null);
+            String target = itemList.get(i).getTarget();
+                mTTS.speak(name +", "+target,TextToSpeech.QUEUE_FLUSH,null);
 
 
         }

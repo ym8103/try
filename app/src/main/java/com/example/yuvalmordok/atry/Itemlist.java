@@ -25,9 +25,13 @@ public class Itemlist extends ArrayAdapter<Item> {
 
         View listViewItem = inflater.inflate(R.layout.list_layout, null, true);
         TextView name = listViewItem.findViewById(R.id.name);
+        TextView target = listViewItem.findViewById(R.id.target);
 
         Item item = ItemList.get(position);
         name.setText(item.getName());
+        if (target.getText().toString().isEmpty())
+            target.setVisibility(View.GONE);
+        name.setText(item.getTarget());
         return listViewItem;
     }
 }
