@@ -3,9 +3,11 @@ package com.example.yuvalmordok.atry;
 
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -60,6 +62,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     AlertDialog.Builder adb;
     private SensorManager mSensorManager;
     boolean destflag;
+    BroadcastBatt broadcastBatt;
 
 
 
@@ -80,6 +83,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        broadcastBatt = new BroadcastBatt();
+
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -119,6 +125,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
                 SensorManager.SENSOR_DELAY_GAME);
+        registerReceiver(broadcastBatt, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    }
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+        unregisterReceiver(broadcastBatt);
     }
 
     @Override
@@ -357,4 +370,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
+
 }

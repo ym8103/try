@@ -29,9 +29,9 @@ public class Itemlist extends ArrayAdapter<Item> {
 
         Item item = ItemList.get(position);
         name.setText(item.getName());
+        name.setText(item.getTarget());
         if (target.getText().toString().isEmpty())
             target.setVisibility(View.GONE);
-        name.setText(item.getTarget());
         return listViewItem;
     }
 }
