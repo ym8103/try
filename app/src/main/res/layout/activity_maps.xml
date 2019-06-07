@@ -22,6 +22,7 @@
             android:layout_height="3dp"
             android:layout_weight="1"
             android:onClick="list"
+            android:background="@drawable/button_bg_rounded_corners"
             android:text="location" />
     </LinearLayout>
 
