@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="532dp"
         android:layout_weight="1"
-        android:text="קרדיטים"
-        android:textSize="90dp" />
+        android:text="תודה רבה לכל מי שעזר לי להוציא את הפרויקט לפועל "
+        android:textSize="40dp" />
 
     <Button
         android:id="@+id/button3"
